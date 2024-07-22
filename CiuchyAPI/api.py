@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, Column, String, Numeric, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
 from pydantic import BaseModel
+from datetime import datetime
 import os
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -54,7 +55,9 @@ def get_db():
 
 @app.post("/ciuchy/")
 async def create_ciuchy(file: UploadFile = File(...), action: str = None, db: Session = Depends(get_db)):
-    file_location = f"images/{file.filename}"
+    currentDateAndTime = datetime.now()
+    currentTime = currentDateAndTime.strftime("%D_%m_%Y_%H:%M:%S")
+    file_location = f"images/{file.filename}at{currentTime}"
     if not os.path.exists('images'):
         os.makedirs('images')
 
