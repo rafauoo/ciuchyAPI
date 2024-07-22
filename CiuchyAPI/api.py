@@ -97,3 +97,33 @@ def update_ciuchy_action(ciuchy_id: int, action_update: CiuchyUpdateAction, db: 
     db.commit()
     db.refresh(db_ciuchy)
     return db_ciuchy
+from typing import List
+@app.post("/ciuchy/multiple/")
+async def create_multiple_ciuchy(
+    files: List[UploadFile] = File(...),
+    action: str = None,
+    db: Session = Depends(get_db)
+):
+    if action:
+        # Check if the action exists
+        db_action = db.query(Action).filter(Action.action == action).first()
+        if db_action is None:
+            raise HTTPException(status_code=400, detail="Invalid action")
+
+    # Process each file
+    ciuchy_list = []
+    for file in files:
+        currentDateAndTime = datetime.now()
+        currentTime = currentDateAndTime.strftime("%d_%m_%Y_%H:%M:%S:%f")
+        file_location = f"images/{file.filename}at{currentTime}"
+        if not os.path.exists('images'):
+            os.makedirs('images')
+
+        with open(file_location, "wb") as buffer:
+            buffer.write(await file.read())
+        
+        db_ciuchy = Ciuchy(img=file_location, action=action)
+        db.add(db_ciuchy)
+        ciuchy_list.append(db_ciuchy)
+    db.commit()
+    return {"status": "success", "items_created": len(ciuchy_list)}
