@@ -97,10 +97,10 @@ def update_ciuchy_action(ciuchy_id: int, action_update: CiuchyUpdateAction, db: 
     db.commit()
     db.refresh(db_ciuchy)
     return db_ciuchy
-from typing import List
+
 @app.post("/ciuchy/multiple/")
 async def create_multiple_ciuchy(
-    files: List[UploadFile] = File(...),
+    files: list[UploadFile] = File(...),
     action: str = None,
     db: Session = Depends(get_db)
 ):
@@ -127,3 +127,7 @@ async def create_multiple_ciuchy(
         ciuchy_list.append(db_ciuchy)
     db.commit()
     return {"status": "success", "items_created": len(ciuchy_list)}
+
+@app.post("/files")
+def file_contents(files: List[UploadFile]):
+    return {"filenames": [file.filename for file in files]}
