@@ -7,7 +7,7 @@ from datetime import datetime
 import os
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-DATABASE_URL = "postgresql://postgres:haslo123@localhost:5432/ciuchy"  # Update with your database credentials
+DATABASE_URL = "postgresql://admin123:haslo123#@ciuchydb.postgres.database.azure.com:5432/ciuchy"  # Update with your database credentials
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
