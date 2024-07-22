@@ -56,7 +56,7 @@ def get_db():
 @app.post("/ciuchy/")
 async def create_ciuchy(file: UploadFile = File(...), action: str = None, db: Session = Depends(get_db)):
     currentDateAndTime = datetime.now()
-    currentTime = currentDateAndTime.strftime("%D_%m_%Y_%H:%M:%S")
+    currentTime = currentDateAndTime.strftime("%d_%m_%Y_%H:%M:%S")
     file_location = f"images/{file.filename}at{currentTime}"
     if not os.path.exists('images'):
         os.makedirs('images')
