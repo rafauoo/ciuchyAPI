@@ -97,10 +97,10 @@ def update_ciuchy_action(ciuchy_id: int, action_update: CiuchyUpdateAction, db: 
     db.commit()
     db.refresh(db_ciuchy)
     return db_ciuchy
-
+from typing import List
 @app.post("/ciuchy/multiple/")
 async def create_multiple_ciuchy(
-    files: list[UploadFile] = File(...),
+    files: List[UploadFile] = File(...),
     action: str = None,
     db: Session = Depends(get_db)
 ):
